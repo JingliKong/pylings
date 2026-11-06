@@ -1,0 +1,704 @@
+# pylings catalog: every exercise, in the order you should do them (easy -> hard).
+#
+#   name      unique id; `python3 -m pylings run <name>` (a unique prefix works too)
+#   level     warm-up | middle | middle+ | senior | staff
+#   mode      "test" (default: done when the tests pass) or "review" (code review, marked by hand)
+#   path      the file you edit
+#   test      the file that runs the tests (warm-ups carry their tests inside)
+#   solution  reference solution / answer key
+#   hints     shown one at a time with `h` in watch mode
+
+[[exercises]]
+name = "numbers1"
+level = "warm-up"
+topic = "basics"
+path = "exercises/0_warmups/01_basics/numbers1.py"
+test = "exercises/0_warmups/01_basics/numbers1.py"
+solution = "solutions/0_warmups/01_basics/numbers1.py"
+hints = [
+  "`/` always returns a float in Python 3. Which operator does integer division? `divmod(a, b)` returns both the quotient and the remainder.",
+  "For negative numbers `%` takes the sign of the divisor: `-47 % 10 == 3`. `abs()` helps.",
+  "Never compare floats with `==`. The `math` module has a function for this.",
+]
+
+[[exercises]]
+name = "strings1"
+level = "warm-up"
+topic = "basics"
+path = "exercises/0_warmups/01_basics/strings1.py"
+test = "exercises/0_warmups/01_basics/strings1.py"
+solution = "solutions/0_warmups/01_basics/strings1.py"
+hints = [
+  "Compare `'a  b'.split(' ')` with `'a  b'.split()` in the REPL.",
+  "Reverse the list of words, not the string: `reversed(...)` or `[::-1]` on a list, then `' '.join(...)`.",
+  "`'a.b.c'.rpartition('.')` returns `('a.b', '.', 'c')`. What does it return when there is no dot?",
+]
+
+[[exercises]]
+name = "strings2"
+level = "warm-up"
+topic = "basics"
+path = "exercises/0_warmups/01_basics/strings2.py"
+test = "exercises/0_warmups/01_basics/strings2.py"
+solution = "solutions/0_warmups/01_basics/strings2.py"
+hints = [
+  "Inside `{...}` you can add `:spec`: `f'{x:.2f}'` gives two decimals.",
+  "`,` in the spec adds thousands separators; `<10` left-aligns in 10 characters, `>5` right-aligns.",
+  "`f'{user_id=}'` prints `user_id=42`.",
+]
+
+[[exercises]]
+name = "truthiness1"
+level = "warm-up"
+topic = "basics"
+path = "exercises/0_warmups/01_basics/truthiness1.py"
+test = "exercises/0_warmups/01_basics/truthiness1.py"
+solution = "solutions/0_warmups/01_basics/truthiness1.py"
+hints = [
+  "What is `0 or 8080`? `dict.get` takes a second argument.",
+  "`None != []` is True. `bool(x)` handles None and empty lists the same way.",
+  "In `describe`, which check has to come first?",
+]
+
+[[exercises]]
+name = "lists1"
+level = "warm-up"
+topic = "collections"
+path = "exercises/0_warmups/02_collections/lists1.py"
+test = "exercises/0_warmups/02_collections/lists1.py"
+solution = "solutions/0_warmups/02_collections/lists1.py"
+hints = [
+  "`result = tags` does not copy anything: both names point to the same list.",
+  "`[['.'] * 3] * 3` contains the same inner list three times. Use a comprehension that builds a new row each time.",
+  "`grid.copy()` copies the outer list only. Copy each row too (or use `copy.deepcopy`).",
+]
+
+[[exercises]]
+name = "lists2"
+level = "warm-up"
+topic = "collections"
+path = "exercises/0_warmups/02_collections/lists2.py"
+test = "exercises/0_warmups/02_collections/lists2.py"
+solution = "solutions/0_warmups/02_collections/lists2.py"
+hints = [
+  "Trace the loop by hand with `[-1, -2, 3]`: which index does the loop look at after the first removal?",
+  "Build the filtered list with a comprehension, then put it into the SAME list object with `nums[:] = ...`.",
+  "`set` loses order. Dict keys are unique AND ordered: `dict.fromkeys(items)`.",
+]
+
+[[exercises]]
+name = "tuples1"
+level = "warm-up"
+topic = "collections"
+path = "exercises/0_warmups/02_collections/tuples1.py"
+test = "exercises/0_warmups/02_collections/tuples1.py"
+solution = "solutions/0_warmups/02_collections/tuples1.py"
+hints = [
+  "`return x, y` already returns a tuple.",
+  "`first, *rest = [1, 2, 3]` gives `first == 1`, `rest == [2, 3]`.",
+  "You can unpack directly in a comprehension: `[(b, a) for a, b in pairs]`.",
+]
+
+[[exercises]]
+name = "dicts1"
+level = "warm-up"
+topic = "collections"
+path = "exercises/0_warmups/02_collections/dicts1.py"
+test = "exercises/0_warmups/02_collections/dicts1.py"
+solution = "solutions/0_warmups/02_collections/dicts1.py"
+hints = [
+  "`counts[word] += 1` needs the key to exist already. `counts.get(word, 0)` returns 0 for a new word.",
+  "`groups.setdefault(key, [])` returns the list stored under key, creating it if needed — then `.append`.",
+  "`update` changes `defaults` itself. `a | b` (3.9+) returns a new merged dict.",
+]
+
+[[exercises]]
+name = "dicts2"
+level = "warm-up"
+topic = "collections"
+path = "exercises/0_warmups/02_collections/dicts2.py"
+test = "exercises/0_warmups/02_collections/dicts2.py"
+solution = "solutions/0_warmups/02_collections/dicts2.py"
+hints = [
+  "`Counter(words).most_common(2)` returns `[(word, count), ...]`.",
+  "Lower-case the text before splitting it.",
+  "`d = defaultdict(list); d[key].append(x)` — then `return dict(d)`.",
+]
+
+[[exercises]]
+name = "sets1"
+level = "warm-up"
+topic = "collections"
+path = "exercises/0_warmups/02_collections/sets1.py"
+test = "exercises/0_warmups/02_collections/sets1.py"
+solution = "solutions/0_warmups/02_collections/sets1.py"
+hints = [
+  "Convert the lists to sets first: `set(a) & set(b)`.",
+  "`sorted()` accepts a set and returns a list.",
+  "A set drops duplicates. Compare its size with the list's size.",
+]
+
+[[exercises]]
+name = "comprehensions1"
+level = "warm-up"
+topic = "collections"
+path = "exercises/0_warmups/02_collections/comprehensions1.py"
+test = "exercises/0_warmups/02_collections/comprehensions1.py"
+solution = "solutions/0_warmups/02_collections/comprehensions1.py"
+hints = [
+  "`[expr for x in items if condition]`; dicts: `{key: value for x in items}`.",
+  "Nested: `[x for row in matrix for x in row]` — the outer loop comes first.",
+  "`zip(*matrix)` is `zip(row0, row1, ...)`, which yields columns.",
+]
+
+[[exercises]]
+name = "defaults1"
+level = "warm-up"
+topic = "functions"
+path = "exercises/0_warmups/03_functions/defaults1.py"
+test = "exercises/0_warmups/03_functions/defaults1.py"
+solution = "solutions/0_warmups/03_functions/defaults1.py"
+hints = [
+  "Run `add_item('a'); add_item('b')` in the REPL and print `add_item.__defaults__`.",
+  "Use `None` as the default value and create the list inside the function.",
+  "`when=time.time()` is computed when the module is imported, not when you call the function.",
+]
+
+[[exercises]]
+name = "args1"
+level = "warm-up"
+topic = "functions"
+path = "exercises/0_warmups/03_functions/args1.py"
+test = "exercises/0_warmups/03_functions/args1.py"
+solution = "solutions/0_warmups/03_functions/args1.py"
+hints = [
+  "Inside the function, `nums` is a tuple and `query` is a dict.",
+  "`'/'.join(...)` needs strings: convert the parts with `str`.",
+  "`def f(a, *, b)` — everything after the lone `*` must be passed by name.",
+]
+
+[[exercises]]
+name = "closures1"
+level = "warm-up"
+topic = "functions"
+path = "exercises/0_warmups/03_functions/closures1.py"
+test = "exercises/0_warmups/03_functions/closures1.py"
+solution = "solutions/0_warmups/03_functions/closures1.py"
+hints = [
+  "Print `[f(10) for f in make_multipliers()]`. Which value of `i` do all the lambdas see?",
+  "Bind the current value with a default argument: `lambda x, i=i: ...`.",
+  "`count += 1` assigns to `count`, which makes it local. Declare `nonlocal count`.",
+]
+
+[[exercises]]
+name = "sorting1"
+level = "warm-up"
+topic = "functions"
+path = "exercises/0_warmups/03_functions/sorting1.py"
+test = "exercises/0_warmups/03_functions/sorting1.py"
+solution = "solutions/0_warmups/03_functions/sorting1.py"
+hints = [
+  "What does `[3, 1].sort()` return?",
+  "A key can return a tuple: `key=lambda p: (-p[1], p[0])` sorts by age descending, then name.",
+  "Iterating a dict gives its keys: `sorted(scores, key=...)` returns names.",
+]
+
+[[exercises]]
+name = "errors1"
+level = "warm-up"
+topic = "errors"
+path = "exercises/0_warmups/04_errors/errors1.py"
+test = "exercises/0_warmups/04_errors/errors1.py"
+solution = "solutions/0_warmups/04_errors/errors1.py"
+hints = [
+  "`int(None)` raises TypeError, `int('abc')` raises ValueError. Catch only one of them, then check the range.",
+  "`with open(...) as f:` closes the file when the block ends, even on `return`.",
+  "Wrap the loop in `try: ... finally: log.append('done')`.",
+]
+
+[[exercises]]
+name = "errors2"
+level = "warm-up"
+topic = "errors"
+path = "exercises/0_warmups/04_errors/errors2.py"
+test = "exercises/0_warmups/04_errors/errors2.py"
+solution = "solutions/0_warmups/04_errors/errors2.py"
+hints = [
+  "Give InsufficientFunds an `__init__(self, balance, amount)` that calls `super().__init__(message)`.",
+  "`withdraw` must raise the new class, not a plain Exception.",
+  "`except json.JSONDecodeError as e: raise ConfigError(...) from e`.",
+]
+
+[[exercises]]
+name = "classes1"
+level = "warm-up"
+topic = "classes"
+path = "exercises/0_warmups/05_classes/classes1.py"
+test = "exercises/0_warmups/05_classes/classes1.py"
+solution = "solutions/0_warmups/05_classes/classes1.py"
+hints = [
+  "In `__init__`, `x = x` creates a local variable. Attributes live on `self`.",
+  "Check the distance formula: both differences are squared.",
+  "`def __repr__(self): return f'Point(x={self.x}, y={self.y})'`.",
+]
+
+[[exercises]]
+name = "classes2"
+level = "warm-up"
+topic = "classes"
+path = "exercises/0_warmups/05_classes/classes2.py"
+test = "exercises/0_warmups/05_classes/classes2.py"
+solution = "solutions/0_warmups/05_classes/classes2.py"
+hints = [
+  "`members = []` in the class body is ONE list shared by every Team.",
+  "Create `self.members = []` in `__init__`.",
+  "`self.created += 1` is `self.created = self.created + 1`: it writes an instance attribute. Write to `Team.created`.",
+]
+
+[[exercises]]
+name = "properties1"
+level = "warm-up"
+topic = "classes"
+path = "exercises/0_warmups/05_classes/properties1.py"
+test = "exercises/0_warmups/05_classes/properties1.py"
+solution = "solutions/0_warmups/05_classes/properties1.py"
+hints = [
+  "Store only celsius (e.g. in `self._celsius`) and compute fahrenheit with `@property`.",
+  "A property gets a setter with `@celsius.setter`. Put the validation there.",
+  "In `__init__`, assign `self.celsius = celsius` so the setter (and the check) runs.",
+]
+
+[[exercises]]
+name = "dunder1"
+level = "warm-up"
+topic = "classes"
+path = "exercises/0_warmups/05_classes/dunder1.py"
+test = "exercises/0_warmups/05_classes/dunder1.py"
+solution = "solutions/0_warmups/05_classes/dunder1.py"
+hints = [
+  "A class that defines `__eq__` but not `__hash__` is unhashable.",
+  "In `__eq__`, return `NotImplemented` when `other` is not a Card.",
+  "Deck needs `__len__` and `__getitem__`; iteration and `in` come for free.",
+]
+
+[[exercises]]
+name = "dataclasses1"
+level = "warm-up"
+topic = "classes"
+path = "exercises/0_warmups/05_classes/dataclasses1.py"
+test = "exercises/0_warmups/05_classes/dataclasses1.py"
+solution = "solutions/0_warmups/05_classes/dataclasses1.py"
+hints = [
+  "Read the ValueError: dataclasses don't allow `= []` as a default.",
+  "`items: list = field(default_factory=list)`.",
+  "`@dataclass(frozen=True)` makes instances immutable and hashable.",
+]
+
+[[exercises]]
+name = "inheritance1"
+level = "warm-up"
+topic = "classes"
+path = "exercises/0_warmups/05_classes/inheritance1.py"
+test = "exercises/0_warmups/05_classes/inheritance1.py"
+solution = "solutions/0_warmups/05_classes/inheritance1.py"
+hints = [
+  "`Dog.__init__` replaces `Animal.__init__`, so `self.name` is never set. Call `super().__init__(name)`.",
+  "Inherit from `abc.ABC` and mark `speak` with `@abstractmethod`.",
+  "In Puppy: `return 'yip! ' + super().speak()`.",
+]
+
+[[exercises]]
+name = "generators1"
+level = "warm-up"
+topic = "iterators"
+path = "exercises/0_warmups/06_iterators/generators1.py"
+test = "exercises/0_warmups/06_iterators/generators1.py"
+solution = "solutions/0_warmups/06_iterators/generators1.py"
+hints = [
+  "Replace `records.append(x)` with `yield x` and drop the list.",
+  "`line.strip()` then `if not line or line.startswith('#'): continue`.",
+  "`a, b = b, a + b` inside `while True:`.",
+]
+
+[[exercises]]
+name = "iterators1"
+level = "warm-up"
+topic = "iterators"
+path = "exercises/0_warmups/06_iterators/iterators1.py"
+test = "exercises/0_warmups/06_iterators/iterators1.py"
+solution = "solutions/0_warmups/06_iterators/iterators1.py"
+hints = [
+  "Why does the second `list(c)` come back empty? Where does the counting state live?",
+  "Keep only `start` on the object. Each call of `__iter__` should start counting again.",
+  "Make `__iter__` a generator (use `yield`) and delete `__next__`.",
+]
+
+[[exercises]]
+name = "itertools1"
+level = "warm-up"
+topic = "iterators"
+path = "exercises/0_warmups/06_iterators/itertools1.py"
+test = "exercises/0_warmups/06_iterators/itertools1.py"
+solution = "solutions/0_warmups/06_iterators/itertools1.py"
+hints = [
+  "`groupby('aab')` yields `('a', <group>), ('b', <group>)`; each group is an iterator.",
+  "`itertools.pairwise` and `itertools.product` do exactly what the docstrings say.",
+  "`itertools.islice(iterator, n)` takes the first n items, even from an infinite generator.",
+]
+
+[[exercises]]
+name = "context1"
+level = "warm-up"
+topic = "context"
+path = "exercises/0_warmups/07_context/context1.py"
+test = "exercises/0_warmups/07_context/context1.py"
+solution = "solutions/0_warmups/07_context/context1.py"
+hints = [
+  "What does `__enter__` return? That is the value of `t` in `with Timer() as t`.",
+  "If `__exit__` returns True, the exception is swallowed.",
+  "Tag: store `out` and `name` in `__init__`, write the opening tag in `__enter__`, the closing tag in `__exit__`.",
+]
+
+[[exercises]]
+name = "context2"
+level = "warm-up"
+topic = "context"
+path = "exercises/0_warmups/07_context/context2.py"
+test = "exercises/0_warmups/07_context/context2.py"
+solution = "solutions/0_warmups/07_context/context2.py"
+hints = [
+  "When the with-block raises, where in the generator does the exception appear?",
+  "Wrap the `yield` in `try: ... finally:`.",
+  "`with contextlib.suppress(FileNotFoundError): ... return line`, then `return default` after the block.",
+]
+
+[[exercises]]
+name = "decorators1"
+level = "warm-up"
+topic = "decorators"
+path = "exercises/0_warmups/08_decorators/decorators1.py"
+test = "exercises/0_warmups/08_decorators/decorators1.py"
+solution = "solutions/0_warmups/08_decorators/decorators1.py"
+hints = [
+  "`fn(args, kwargs)` passes a tuple and a dict as two positional arguments.",
+  "Use `fn(*args, **kwargs)`.",
+  "Put `@functools.wraps(fn)` on the wrapper.",
+]
+
+[[exercises]]
+name = "decorators2"
+level = "warm-up"
+topic = "decorators"
+path = "exercises/0_warmups/08_decorators/decorators2.py"
+test = "exercises/0_warmups/08_decorators/decorators2.py"
+solution = "solutions/0_warmups/08_decorators/decorators2.py"
+hints = [
+  "`@repeat(3)` is `f = repeat(3)(f)`: `repeat` returns a decorator.",
+  "Check `times` in `repeat` itself, before defining the inner decorator.",
+  "`tag` returns a decorator that sets `fn.tags` and returns `fn`.",
+]
+
+[[exercises]]
+name = "datetime1"
+level = "warm-up"
+topic = "stdlib"
+path = "exercises/0_warmups/09_stdlib/datetime1.py"
+test = "exercises/0_warmups/09_stdlib/datetime1.py"
+solution = "solutions/0_warmups/09_stdlib/datetime1.py"
+hints = [
+  "`datetime.now(timezone.utc)` is aware; `datetime.utcnow()` is not.",
+  "Use `dt.astimezone(UTC_PLUS_5)` to change the clock without changing the instant.",
+  "`datetime.fromisoformat` handles both `Z` and `+05:00`. Check `.tzinfo is None`. Subtracting two dates gives a timedelta.",
+]
+
+[[exercises]]
+name = "json_pathlib1"
+level = "warm-up"
+topic = "stdlib"
+path = "exercises/0_warmups/09_stdlib/json_pathlib1.py"
+test = "exercises/0_warmups/09_stdlib/json_pathlib1.py"
+solution = "solutions/0_warmups/09_stdlib/json_pathlib1.py"
+hints = [
+  "`json.dump(data, f, indent=2, ensure_ascii=False)` and `open(..., encoding='utf-8')`.",
+  "`Path(path).parent.mkdir(parents=True, exist_ok=True)` creates missing folders.",
+  "`Path(root).rglob('*.py')`, then `p.relative_to(root).as_posix()`.",
+]
+
+[[exercises]]
+name = "decimal1"
+level = "warm-up"
+topic = "stdlib"
+path = "exercises/0_warmups/09_stdlib/decimal1.py"
+test = "exercises/0_warmups/09_stdlib/decimal1.py"
+solution = "solutions/0_warmups/09_stdlib/decimal1.py"
+hints = [
+  "Don't go through float at all: `Decimal('0.10')` is exact.",
+  "`(x).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)`.",
+  "`Decimal(0.1)` shows the float's binary error. Convert the float to a string first.",
+]
+
+[[exercises]]
+name = "threads1"
+level = "warm-up"
+topic = "concurrency"
+path = "exercises/0_warmups/10_concurrency/threads1.py"
+test = "exercises/0_warmups/10_concurrency/threads1.py"
+solution = "solutions/0_warmups/10_concurrency/threads1.py"
+hints = [
+  "Two threads can both read 5, both add 1, and both write 6.",
+  "Create a `threading.Lock()` in `__init__` and use `with self._lock:` around the read AND the write.",
+  "`with ThreadPoolExecutor(max_workers=workers) as pool: return list(pool.map(fn, items))`.",
+]
+
+[[exercises]]
+name = "asyncio1"
+level = "warm-up"
+topic = "concurrency"
+path = "exercises/0_warmups/10_concurrency/asyncio1.py"
+test = "exercises/0_warmups/10_concurrency/asyncio1.py"
+solution = "solutions/0_warmups/10_concurrency/asyncio1.py"
+hints = [
+  "Each `await fetch(...)` in the loop waits 0.1 s before the next one starts.",
+  "`await asyncio.gather(*(fetch(n, delay) for n in names))`.",
+  "`async with asyncio.timeout(seconds):` raises TimeoutError when time runs out.",
+]
+
+[[exercises]]
+name = "ex01_iter_tools"
+level = "middle"
+path = "exercises/1_middle/ex01_iter_tools.py"
+test = "tests/test_ex01_iter_tools.py"
+solution = "solutions/1_middle/ex01_iter_tools.py"
+hints = [
+  "A generator function's body, including an `if n < 1: raise`, only runs at the first `next()`. Split it: a plain function validates, then returns an inner generator.",
+  "sliding_window: `collections.deque(maxlen=n)` drops the oldest item for you on each append.",
+  "flatten without recursion: keep a stack of iterators. Push `iter(item)` when you meet a nested iterable, pop when the top one runs out.",
+]
+
+[[exercises]]
+name = "ex02_lru_cache"
+level = "middle"
+path = "exercises/1_middle/ex02_lru_cache.py"
+test = "tests/test_ex02_lru_cache.py"
+solution = "solutions/1_middle/ex02_lru_cache.py"
+hints = [
+  "A dict gives O(1) lookup; a doubly linked list gives O(1) move-to-front and drop-the-tail. Store the list nodes in the dict.",
+  "One sentinel node whose `next` is the most recent entry and whose `prev` is the least recent removes every `if node is None` branch.",
+  "The dict maps key -> node, and a node is never None, so `self._map.get(key)` tells a stored None value apart from a missing key.",
+]
+
+[[exercises]]
+name = "ex03_retry"
+level = "middle"
+path = "exercises/1_middle/ex03_retry.py"
+test = "tests/test_ex03_retry.py"
+solution = "solutions/1_middle/ex03_retry.py"
+hints = [
+  "Validate `attempts` inside `retry()` itself, before you build the decorator, so a bad config fails at import time.",
+  "`inspect.iscoroutinefunction(fn)` tells you to build an `async def` wrapper that awaits `async_sleep`.",
+  "On the last attempt use a bare `raise` inside the except block; sleep only between attempts.",
+]
+
+[[exercises]]
+name = "ex04_bug_hunt_middle"
+level = "middle"
+mode = "review"
+path = "exercises/1_middle/ex04_bug_hunt_middle.py"
+solution = "solutions/1_middle/ex04_bug_hunt_middle.md"
+hints = [
+  "Look hard at every default argument, every class-level attribute and every `.copy()`.",
+  "Follow user input: where does it reach SQL or the filesystem?",
+  "Check every `x or default`, every `if d.get(k):` and what `.sort()` returns.",
+]
+
+[[exercises]]
+name = "ex05_kv_transactions"
+level = "middle"
+path = "exercises/1_middle/ex05_kv_transactions.py"
+test = "tests/test_ex05_kv_transactions.py"
+solution = "solutions/1_middle/ex05_kv_transactions.py"
+hints = [
+  "Copying the whole dict on begin() is O(n). Remember only what each transaction changes.",
+  "Undo log: for each transaction, map key -> the value it had before that transaction first touched it (a sentinel for 'did not exist').",
+  "On commit, merge the inner undo log into the parent's, keeping the parent's entry when both have one. Keep a Counter of values so count() is O(1).",
+]
+
+[[exercises]]
+name = "ex06_log_report"
+level = "middle"
+path = "exercises/1_middle/ex06_log_report.py"
+test = "tests/test_ex06_log_report.py"
+solution = "solutions/1_middle/ex06_log_report.py"
+hints = [
+  "Write a `_parse(line)` helper that returns a tuple, or None for a bad line. Count the Nones; never let parsing raise.",
+  "`datetime.fromisoformat` understands 'Z' and offsets; reject results whose tzinfo is None. Aware datetimes compare as instants.",
+  "Nearest rank: sort, rank = ceil(p * n / 100), value = values[rank - 1]. For top(): sort by the tie-breaker first, then by the metric with reverse=True (sorting is stable).",
+]
+
+[[exercises]]
+name = "ex07_money"
+level = "middle+"
+path = "exercises/2_middle_plus/ex07_money.py"
+test = "tests/test_ex07_money.py"
+solution = "solutions/2_middle_plus/ex07_money.py"
+hints = [
+  "Store the amount as a Decimal quantized to the currency's minor units, and raise if quantizing would change the value.",
+  "Return NotImplemented from operators for unsupported types. sum() starts from int 0, so `__radd__` must accept exactly 0.",
+  "allocate: work in integer minor units, give each part the floor of its exact share, then hand out the leftover units by largest fractional remainder (fractions.Fraction keeps it exact).",
+]
+
+[[exercises]]
+name = "ex08_rate_limiter"
+level = "middle+"
+path = "exercises/2_middle_plus/ex08_rate_limiter.py"
+test = "tests/test_ex08_rate_limiter.py"
+solution = "solutions/2_middle_plus/ex08_rate_limiter.py"
+hints = [
+  "No timers: store (tokens, last_update) per key and add elapsed * rate tokens lazily on each call, capped at capacity.",
+  "Read the clock inside the lock, and treat a negative elapsed time as zero.",
+  "wait_time = missing tokens / rate. cleanup() drops buckets that would be full by now.",
+]
+
+[[exercises]]
+name = "ex09_event_bus"
+level = "middle+"
+path = "exercises/2_middle_plus/ex09_event_bus.py"
+test = "tests/test_ex09_event_bus.py"
+solution = "solutions/2_middle_plus/ex09_event_bus.py"
+hints = [
+  "Make each subscription a small object with an `active` flag; unsubscribe clears the flag and removes it from the list.",
+  "emit(): take a snapshot of matching subscriptions sorted by (-priority, seq), skip any that became inactive, and remove once-subscriptions BEFORE calling them.",
+  "Bound methods: `weakref.WeakMethod(handler, callback)`. Collect handler exceptions and raise one ExceptionGroup at the end.",
+]
+
+[[exercises]]
+name = "ex10_task_graph"
+level = "middle+"
+path = "exercises/2_middle_plus/ex10_task_graph.py"
+test = "tests/test_ex10_task_graph.py"
+solution = "solutions/2_middle_plus/ex10_task_graph.py"
+hints = [
+  "Kahn's algorithm: start from tasks with no prerequisites; a task's wave is 1 + the max wave of its prerequisites.",
+  "If not every task got processed, the leftovers contain a cycle. Walk from any leftover task to a leftover prerequisite until you revisit one.",
+  "run(): keep a 'prerequisites still running' counter per task and submit a task when it reaches 0. Use `concurrent.futures.wait(..., return_when=FIRST_COMPLETED)` and never hand the pool more than max_workers tasks.",
+]
+
+[[exercises]]
+name = "ex11_contextmanager"
+level = "senior"
+path = "exercises/3_senior/ex11_contextmanager.py"
+test = "tests/test_ex11_contextmanager.py"
+solution = "solutions/3_senior/ex11_contextmanager.py"
+hints = [
+  "__enter__ is `next(gen)`; a StopIteration there means the generator didn't yield. __exit__ without an exception is another `next(gen)`, which must raise StopIteration.",
+  "With an exception, `gen.throw(exc)`. If the same object comes back out, return False; StopIteration means it was swallowed, so return True.",
+  "PEP 479: a StopIteration thrown into a generator comes out as RuntimeError whose __cause__ is your exception. For the decorator form, keep the function and its arguments so each call can make a fresh generator.",
+]
+
+[[exercises]]
+name = "ex12_singleflight_cache"
+level = "senior"
+path = "exercises/3_senior/ex12_singleflight_cache.py"
+test = "tests/test_ex12_singleflight_cache.py"
+solution = "solutions/3_senior/ex12_singleflight_cache.py"
+hints = [
+  "Build the key from args plus sorted kwargs (with a marker between them), and call hash() on it early so unhashable arguments fail fast.",
+  "Keep a dict of in-flight calls: key -> an object with a threading.Event, the result and the error. The first caller computes; followers wait on the event.",
+  "Hold the lock only for bookkeeping, never while calling the function. A generation counter stops a flight that started before cache_clear() from writing its result back.",
+]
+
+[[exercises]]
+name = "ex13_circuit_breaker"
+level = "senior"
+path = "exercises/3_senior/ex13_circuit_breaker.py"
+test = "tests/test_ex13_circuit_breaker.py"
+solution = "solutions/3_senior/ex13_circuit_breaker.py"
+hints = [
+  "Make OPEN -> HALF_OPEN lazy: check the clock whenever someone reads `state` or calls `call()`.",
+  "Bump a generation counter on every transition. A call records the generation it started in, and its outcome is ignored if the generation has changed since.",
+  "Collect transitions while holding the lock and fire on_state_change only after releasing it. Never hold the lock while `fn` runs.",
+]
+
+[[exercises]]
+name = "ex14_external_sort"
+level = "senior"
+path = "exercises/3_senior/ex14_external_sort.py"
+test = "tests/test_ex14_external_sort.py"
+solution = "solutions/3_senior/ex14_external_sort.py"
+hints = [
+  "Phase 1: read up to max_lines lines (newlines stripped), sort, and write each run to a temp file. Phase 2: heapq.merge, at most fan_in files at a time, repeating passes until one run is left.",
+  "heapq.merge is stable across inputs in argument order, so merge runs in the order they were created.",
+  "Use tempfile.TemporaryDirectory for cleanup. Write the final output to a temp file in dst's directory, then os.replace it into place.",
+]
+
+[[exercises]]
+name = "ex15_async_bounded_map"
+level = "senior"
+path = "exercises/3_senior/ex15_async_bounded_map.py"
+test = "tests/test_ex15_async_bounded_map.py"
+solution = "solutions/3_senior/ex15_async_bounded_map.py"
+hints = [
+  "Keep a deque of at most `limit` tasks in input order. Top it up from the source, then wait for the head.",
+  "Wait with asyncio.wait(pending, return_when=FIRST_COMPLETED) so a failure further back surfaces right away, not only when it reaches the head.",
+  "Put the cleanup in `finally`: cancel every pending task, then AWAIT them (gather with return_exceptions=True), then aclose() the source if it has one.",
+]
+
+[[exercises]]
+name = "ex16_async_worker_pool"
+level = "senior"
+path = "exercises/3_senior/ex16_async_worker_pool.py"
+test = "tests/test_ex16_async_worker_pool.py"
+solution = "solutions/3_senior/ex16_async_worker_pool.py"
+hints = [
+  "asyncio.Queue(maxsize=max_queue) gives you backpressure. Queue.shutdown() (3.13+) wakes blocked put()s with QueueShutDown, and get() raises it once the queue is empty.",
+  "Run each job in its own task and wait for it with asyncio.wait({task}), which doesn't raise. Then a CancelledError in the worker can only mean the worker itself is being cancelled.",
+  "Add a done-callback on the caller's future that cancels the job task when the future is cancelled. Hard shutdown: shutdown the queue, cancel the queued futures, cancel the workers, gather them.",
+]
+
+[[exercises]]
+name = "ex17_bug_hunt"
+level = "senior"
+mode = "review"
+path = "exercises/3_senior/ex17_bug_hunt.py"
+solution = "solutions/3_senior/ex17_bug_hunt.md"
+hints = [
+  "Check every lock: what is read or written outside it? Check every cache: what does it keep alive, and does it ever expire?",
+  "Check every except clause: what does it catch that it shouldn't (CancelledError, KeyboardInterrupt)? What does a `return` in `finally` do?",
+  "Check every asyncio task: who keeps a reference to it, and who looks at its exception?",
+]
+
+[[exercises]]
+name = "ex18_generator_scheduler"
+level = "staff"
+path = "exercises/4_staff/ex18_generator_scheduler.py"
+test = "tests/test_ex18_generator_scheduler.py"
+solution = "solutions/4_staff/ex18_generator_scheduler.py"
+hints = [
+  "A task is (generator, value or exception to send next). The ready queue is a deque; sleepers live in a heap of (wake_time, seq, task).",
+  "On each step: move due sleepers to the ready queue; if nothing is ready, jump the clock to the next wake time. Then gen.send(value) or gen.throw(exc) and dispatch on what it yields.",
+  "Join: keep task id -> list of waiting tasks; when a task finishes, wake its waiters with the result or the exception. Tasks that are still waiting when nothing can run mean a deadlock.",
+]
+
+[[exercises]]
+name = "ex19_typed_model"
+level = "staff"
+path = "exercises/4_staff/ex19_typed_model.py"
+test = "tests/test_ex19_typed_model.py"
+solution = "solutions/4_staff/ex19_typed_model.py"
+hints = [
+  "Collect fields in __init_subclass__: walk the MRO for parent fields, then read the class's own annotations with annotationlib in FORWARDREF format, so undefined names don't fail yet.",
+  "Field is a data descriptor (__get__ + __set__ + __set_name__); it stores values in the instance __dict__ under its name.",
+  "Resolve the real types lazily on first validation (typing.get_type_hints on the class), then validate recursively with get_origin/get_args, building a path like 'tags[1]'.",
+]
+
+[[exercises]]
+name = "ex20_di_container"
+level = "staff"
+path = "exercises/4_staff/ex20_di_container.py"
+test = "tests/test_ex20_di_container.py"
+solution = "solutions/4_staff/ex20_di_container.py"
+hints = [
+  "Resolve recursively with an explicit 'currently resolving' list: if an interface is already in it, you have a cycle and the list is the message.",
+  "Use inspect.signature for parameters and their defaults, and typing.get_type_hints(cls.__init__) for the real types.",
+  "Pass the lifetime of the requesting service down the resolution: a singleton chain that reaches a scoped service is the captive-dependency error. Singletons: guard creation with one re-entrant lock (building one singleton may resolve another).",
+]
