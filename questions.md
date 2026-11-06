@@ -1,6 +1,8 @@
-# Question Bank
+# Question Bank — Senior / Engineer
 
-Targets CPython 3.12–3.14.
+Targets CPython 3.12–3.14. Start with
+[questions-middle.md](questions-middle.md) if you're preparing for a middle
+or middle+ role, or to warm up.
 
 ---
 
@@ -309,7 +311,7 @@ What goes wrong with unfinished **async** generators?
   `aclose()` on the loop, and `loop.shutdown_asyncgens()` drains them at
   exit. If you `break` out of `async for`, cleanup runs *later*, possibly in
   a different task context (no cancel scope, wrong contextvars). The fix is
-  `async with contextlib.aclosing(agen):`. Exercise 03 tests this.
+  `async with contextlib.aclosing(agen):`. Exercise 15 tests this.
 
 </details>
 
@@ -407,7 +409,7 @@ startup?
 - Who breaks: runtime-introspection libraries (dataclasses, pydantic,
   FastAPI, DI containers, attrs) that read `__annotations__` *during class
   creation*, when the referenced name may not exist yet. The robust pattern
-  is to capture names early and resolve types lazily (Exercise 05 makes you
+  is to capture names early and resolve types lazily (Exercise 19 makes you
   do exactly that).
 
 </details>
@@ -539,7 +541,7 @@ def get():
   import lock already serialises it), or `functools.cache` on a
   zero-arg function. Note that `functools.cache` does **not** prevent
   duplicate computation under concurrency (no single-flight). That leads
-  into Exercise 02.
+  into Exercise 12.
 
 </details>
 
@@ -700,3 +702,455 @@ import-time registration. How do you review it? *(Explicit registration or
 entry points instead of import side effects; testability; startup time;
 the simplest thing that could work; how you give the feedback, since
 being an engineer is also about growing people.)*
+
+---
+
+## Part 7 — Predict the output, round 2 (senior)
+
+Same rules: output **and why**. These test 3.11–3.14 behaviour.
+
+```python
+# 13
+try:
+    raise ExceptionGroup("eg", [ValueError(1), TypeError(2), ValueError(3)])
+except* ValueError as e:
+    print("V", e.exceptions)
+except* TypeError as e:
+    print("T", e.exceptions)
+```
+
+```python
+# 14
+import functools
+class C:
+    __slots__ = ("a",)
+    @functools.cached_property
+    def x(self):
+        return 1
+print(C().x)
+```
+
+```python
+# 15
+import asyncio
+async def main():
+    t = asyncio.create_task(asyncio.sleep(1))
+    await asyncio.sleep(0)
+    t.cancel()
+    try:
+        await t
+    except asyncio.CancelledError:
+        print("cancelled", asyncio.current_task().cancelling())
+    print("still running")
+asyncio.run(main())
+```
+
+```python
+# 16
+total = 0.0
+for _ in range(10):
+    total += 0.1
+print(total == 1.0, sum([0.1] * 10) == 1.0)
+```
+
+```python
+# 17
+def gen():
+    try:
+        yield 1
+    finally:
+        print("cleanup")
+for v in gen():
+    break
+print("after break")
+```
+
+```python
+# 18
+import gc
+class A:
+    def __del__(self):
+        print("del")
+a = A()
+a.self = a
+del a
+print("end")
+gc.collect()
+```
+
+```python
+# 19
+try:
+    int("x")
+except ValueError, TypeError:
+    print("caught")
+```
+
+```python
+# 20
+print(len(str(int("9" * 5000))))
+```
+
+```python
+# 21
+from dataclasses import dataclass
+@dataclass
+class A:
+    xs: list = []
+```
+
+```python
+# 22
+import asyncio
+async def boom():
+    raise KeyError("k")
+async def main():
+    async with asyncio.TaskGroup() as tg:
+        tg.create_task(asyncio.sleep(10))
+        tg.create_task(boom())
+    print("unreachable?")
+try:
+    asyncio.run(main())
+except* KeyError as eg:
+    print("caught", eg.exceptions)
+```
+
+<details>
+<summary>Answers</summary>
+
+13. `V (ValueError(1), ValueError(3))` then `T (TypeError(2),)`. `except*`
+    **splits** the group: each clause gets a sub-group of the matching
+    exceptions, and *several* clauses can run. Unmatched exceptions are
+    re-raised as a group.
+14. `TypeError: No '__dict__' attribute on 'C' instance to cache 'x'
+    property.` `cached_property` stores the value in the instance
+    `__dict__`, which `__slots__` removes. Add `"__dict__"` to the slots or
+    cache differently.
+15. `cancelled 0` then `still running`. The `CancelledError` came from the
+    **awaited child**, not from cancelling `main`. `main`'s
+    `cancelling()` is 0, so swallowing this error is fine here. If
+    `cancelling() > 0`, *you* are being cancelled and must re-raise. That's
+    the distinction `TaskGroup` and `asyncio.timeout` rely on.
+16. `False True`. Adding 0.1 ten times gives `0.9999999999999999`. But since
+    **3.12, `sum()` of floats uses compensated (Neumaier) summation**, so
+    it returns `1.0`. `math.fsum` is exact-rounded and was always right.
+    "It's in the stdlib" can change the answer between versions.
+17. `cleanup` then `after break`. On `break`, the loop drops its last
+    reference to the generator; CPython's refcounting finalises it right
+    away → `close()` → `GeneratorExit` at the `yield` → `finally` runs. On
+    PyPy (or if something else holds a reference) it runs *later*. Don't
+    rely on it for resources: use `with` / `contextlib.closing`.
+18. `end`, then `del` (during `gc.collect()`). The self-reference keeps the
+    refcount above 0 after `del a`, so only the cycle collector frees it.
+    Since 3.4 (PEP 442) cycles with `__del__` are collected (before that
+    they leaked into `gc.garbage`). `__del__` timing is not deterministic.
+    Prefer `weakref.finalize` or context managers.
+19. `caught`, in 3.14. PEP 758 allows `except A, B:` **without brackets**
+    (as long as there's no `as`). In 3.13 and earlier it's a
+    `SyntaxError` (and in Python 2 it meant `except A as B`!).
+20. `ValueError: Exceeds the limit (4300 digits) for integer string
+    conversion`. Since 3.11 (CVE-2020-10735), int↔str conversion of huge
+    numbers is limited, because it is quadratic — a DoS vector for any
+    service that parses JSON numbers. Raise it with
+    `sys.set_int_max_str_digits()` if you really need to.
+21. `ValueError: mutable default <class 'list'> for field xs is not allowed:
+    use default_factory` — raised **when the class is defined**. Dataclasses
+    reject `list`/`dict`/`set` defaults (anything unhashable) to stop the
+    shared-mutable-default bug. `field(default_factory=list)`.
+22. `caught (KeyError('k'),)`. `boom` fails → the TaskGroup **cancels** the
+    sleeping sibling, waits for it, then raises an `ExceptionGroup`.
+    `"unreachable?"` is never printed, and the program doesn't wait 10 s.
+    Compare with `gather`, which would leave the sleep running.
+
+</details>
+
+---
+
+## Part 8 — More senior production questions
+
+### Q24. `__del__` vs `weakref.finalize` vs context managers. How do you guarantee cleanup?
+
+Follow-ups: What can go wrong inside `__del__`? What happens to
+finalizers at interpreter shutdown? Why does `weakref.ref(obj.method)`
+die immediately?
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- Deterministic cleanup = explicit: `with`, `try/finally`,
+  `contextlib.ExitStack`, `async with`. Everything else is best-effort.
+- `__del__` runs when the refcount hits zero (CPython) or when the GC
+  collects a cycle — at an unknown time, possibly on another thread,
+  possibly during interpreter shutdown when module globals may already be
+  `None`. Exceptions in it are printed and ignored. Resurrecting `self` is
+  possible but horrible.
+- `weakref.finalize(obj, fn, *args)`: callback that must **not** reference
+  `obj` (otherwise it keeps `obj` alive); runs at most once; has `atexit`
+  semantics by default; you can call it early (`f()`), check `f.alive`,
+  `detach()`. `tempfile.TemporaryDirectory` uses it.
+- Bound methods are created fresh on each attribute access →
+  `weakref.ref(obj.method)` refers to a temporary that dies at once.
+  Use `weakref.WeakMethod` (Exercise 09).
+- `ResourceWarning` (run tests with `-W error::ResourceWarning`) catches
+  files/sockets closed only by the GC.
+
+</details>
+
+### Q25. `multiprocessing` start methods: `fork`, `spawn`, `forkserver`. What changed in 3.14 and why?
+
+Follow-ups: Why is `fork` unsafe with threads? What has to be picklable
+with `spawn`? Why is `if __name__ == "__main__":` required?
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- `fork`: copy the parent process (copy-on-write). Fast, inherits
+  everything — including **locks held by other threads** at fork time
+  (those threads don't exist in the child → deadlock on the first
+  `logging` call, malloc lock, OpenSSL state…). 3.12 warns when forking a
+  multi-threaded process.
+- `spawn`: fresh interpreter, re-imports the main module, pickles the
+  target and arguments. Safe, slower startup; lambdas/closures/local
+  classes can't be pickled; the main module must be import-safe (hence
+  the `__main__` guard). Default on macOS since 3.8, and Windows.
+- `forkserver`: a clean single-threaded server process forks workers on
+  request — fork speed without inheriting the parent's threads. **3.14
+  made it the default on Linux** (and other POSIX except macOS).
+- Consequences of 3.14: code that relied on `fork` inheriting globals
+  (e.g., a module-level model loaded in the parent) now pickles/reloads.
+  Be explicit: `mp.get_context("fork"/"spawn")`, pass state as arguments,
+  or use `initializer=` for per-worker setup.
+- Gunicorn-style pre-fork servers fork *before* starting threads, which is
+  why they're fine.
+
+</details>
+
+### Q26. Graceful shutdown of a Python service in Kubernetes. Walk me through it.
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- Sequence: pod marked terminating → removed from Service endpoints
+  (eventually!) → `preStop` hook → **SIGTERM** to PID 1 → grace period
+  (default 30 s) → SIGKILL.
+- PID 1 problems: a shell-form `CMD` makes `sh` PID 1, which doesn't
+  forward signals; a process that is PID 1 gets no default SIGTERM
+  handler. Use exec-form `CMD ["python", ...]`, `tini`/`dumb-init`, or
+  handle SIGTERM yourself.
+- In the app: on SIGTERM, flip readiness to failing, **keep serving for a
+  few seconds** (endpoint removal is asynchronous — otherwise in-flight
+  traffic gets connection-refused), stop accepting, drain in-flight
+  requests and background jobs with a deadline shorter than the grace
+  period, close pools, flush logs/metrics, exit 0.
+- asyncio: `loop.add_signal_handler(SIGTERM, ...)`, cancel the main task,
+  let `TaskGroup`/`finally` blocks do the cleanup; worker pools need a
+  drain-then-cancel escalation (Exercise 16).
+- Anything held only in memory is lost on SIGKILL: use a durable queue /
+  outbox for work you can't lose; make jobs idempotent so redelivery is
+  safe.
+
+</details>
+
+### Q27. `contextvars`: what problem do they solve, and how do they behave with threads and asyncio?
+
+Follow-ups: Why not `threading.local` in async code? What does a new
+task inherit? What about `run_in_executor` / `to_thread`?
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- Request-scoped state (request ID, user, tracing span, DB session) without
+  passing it through every function.
+- `threading.local` is per *thread*; in asyncio, thousands of requests share
+  one thread → they'd see each other's values.
+- A `ContextVar` lives in a `Context`. Each asyncio **task copies the
+  current context when it is created**, so changes inside a task don't
+  leak out, and the child sees the parent's values at creation time.
+- `asyncio.to_thread` copies the context into the worker thread;
+  `loop.run_in_executor` and raw `threading.Thread` do **not** (use
+  `contextvars.copy_context().run(fn)`). 3.14 adds a flag so new threads
+  can inherit the context (default on in the free-threaded build).
+- `var.set()` returns a token; `var.reset(token)` in `finally` restores the
+  previous value — important in middleware.
+- OpenTelemetry, structlog, Sentry all build on this.
+
+</details>
+
+### Q28. How many DB connections should your async service's pool have? Show the reasoning.
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- **Little's law**: concurrency = throughput × latency. 500 queries/s ×
+  10 ms average = 5 connections busy on average; size for peaks and
+  latency spikes (e.g., ×3–4), not for the number of coroutines.
+- The DB is the real limit: Postgres uses a process per connection;
+  hundreds of connections × N pods × M workers per pod exceed
+  `max_connections` and hurt throughput (context switching, lock
+  contention). Rule of thumb for the *server side*: roughly (cores × 2) +
+  effective spindles active connections; beyond that, queue.
+- Use a pooler (PgBouncer in transaction mode) between many app pods and
+  the DB — but transaction pooling breaks session state (prepared
+  statements, `SET`, advisory locks); asyncpg needs
+  `statement_cache_size=0` or PgBouncer ≥1.21 prepared statement support.
+- A pool that is too small looks like slow queries (time waiting for a
+  connection): measure acquire time separately. Set an acquire timeout so
+  overload fails fast instead of piling up.
+- Never hold a connection across an `await` on an external HTTP call.
+
+</details>
+
+### Q29. Backpressure: what is it, and where does a Python service usually lack it?
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- Backpressure = slowing the producer when the consumer can't keep up,
+  instead of buffering without limit until memory runs out or latency
+  explodes.
+- Common missing places: unbounded `asyncio.Queue()` / `queue.Queue()`
+  (default `maxsize=0` = infinite); `asyncio.gather` over all items;
+  `create_task` per incoming message; `ThreadPoolExecutor.submit` (its
+  internal queue is unbounded); reading a whole Kafka partition into memory;
+  web servers with no concurrency limit.
+- Tools: bounded queues (`put` blocks — Exercise 16), semaphores, bounded
+  fan-out (Exercise 15), load shedding (return 429/503 early when the
+  queue is full — better than timing out after 30 s), consumer prefetch
+  limits in brokers, TCP flow control in streaming (`await
+  writer.drain()`).
+- Choose explicitly what happens at the limit: block, drop oldest, drop
+  newest, or reject — each is right for different data.
+
+</details>
+
+### Q30. "Exactly-once processing" — does it exist? How do you get the effect?
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- Over an unreliable network, delivery is at-most-once or at-least-once.
+  "Exactly-once" is at-least-once delivery + **idempotent processing**.
+- Techniques: idempotency keys with a unique constraint in the same
+  transaction as the effect; dedupe table of processed message IDs (with
+  retention); natural idempotency (`SET status = 'paid'` vs `balance =
+  balance - x`); versioned/conditional writes.
+- **Outbox pattern**: write the business change and an "event to publish"
+  row in one DB transaction; a relay publishes from the outbox (and may
+  publish twice → consumers dedupe). Avoids the dual-write bug "DB
+  committed but the message wasn't sent" (or the reverse).
+- Kafka's exactly-once (idempotent producer + transactions) holds only
+  *within* Kafka (read-process-write to Kafka); side effects outside it
+  still need idempotency.
+- Order matters too: partition by entity key if per-entity order is
+  required.
+
+</details>
+
+### Q31. Property-based testing: when is it worth it? Give an example for this repo.
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- Instead of examples, state **properties** that hold for all inputs and
+  let Hypothesis generate (and shrink) counterexamples.
+- Good fits: parsers/serialisers (round trip: `parse(format(x)) == x`),
+  data structures against a simple model (LRU vs a list-based reference —
+  Exercise 02, stateful testing with `RuleBasedStateMachine`; the KV store
+  with transactions vs copying dicts — Exercise 05), algorithms with
+  invariants (`external_sort` output == `sorted()`; `allocate` parts sum to
+  the total and differ by at most one minor unit — Exercise 07).
+- Costs: slower tests, needs thought to find real properties (not just
+  re-implementing the code), flaky if the code is nondeterministic. Pin
+  seeds in CI with the example database; add found failures as explicit
+  examples.
+
+</details>
+
+### Q32. When would you move a hot path from Python to Rust/C, and how?
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- First: profile, then the cheap fixes — better algorithm, avoid
+  per-element Python work (vectorise with NumPy/Polars/Arrow), caching,
+  batching I/O. Many "Python is slow" problems are N+1 queries.
+- Move to native when the hot loop is CPU-bound pure Python, it's stable
+  (not changing weekly), and it's a small surface (one function, clear
+  inputs/outputs).
+- Options: Cython (incremental, Python-like); **PyO3 + maturin** (Rust,
+  memory-safe, good packaging, can release the GIL with `allow_threads`);
+  `cffi`/`ctypes` to an existing C library; mypyc for typed Python
+  modules.
+- Costs: build matrix (manylinux/musllinux/macOS arm64/Windows wheels,
+  abi3 to cut the number of wheels), debugging across the boundary, team
+  skills, data conversion overhead (crossing the boundary per element
+  can be slower than pure Python — pass buffers/arrays).
+- Free-threaded builds: native modules must declare support
+  (`Py_mod_gil`); otherwise importing them re-enables the GIL.
+
+</details>
+
+### Q33. Template strings (PEP 750, 3.14). What problem do they solve over f-strings?
+
+<details>
+<summary>What an engineer's answer covers</summary>
+
+- `t"Hello {name}"` evaluates to a `string.templatelib.Template` object, not
+  a `str`: static string parts plus `Interpolation` objects (value,
+  expression text, conversion, format spec).
+- The consumer decides how to combine them → safe SQL (`sql(t"SELECT … WHERE
+  id = {user_id}")` can turn interpolations into bound parameters), HTML
+  escaping, structured logging (keep values as fields), shell quoting.
+- f-strings can't do this: by the time the function sees the string, the
+  values are already mixed into the text — which is exactly how injection
+  happens.
+- Not a `str`: you can't pass a template where a string is expected
+  without processing it — on purpose. Libraries need to adopt it;
+  until then it's mostly for your own DSLs.
+
+</details>
+
+---
+
+## Part 9 — More architecture prompts
+
+Same grading as Part 6: structure, trade-offs, driving to a decision.
+
+**Q34.** Design a webhook delivery system: 50k customers, 2M events/day,
+customers' endpoints are slow or down. *(Durable queue per customer or
+partitioned by customer; retries with exponential backoff + jitter and a
+max age; circuit breaker per endpoint so one dead customer doesn't eat
+workers (Exercise 13); per-customer concurrency limits (bulkheads);
+HMAC-signed payloads with timestamps against replay; idempotency key per
+event so customers can dedupe; dead-letter queue + replay UI; ordering —
+promise it or explicitly don't; observability per customer.)*
+
+**Q35.** A nightly batch job in Python now takes 9 hours and must finish in
+4. *(Profile first — I/O or CPU? Split into stages with checkpoints so
+failures resume; parallelise by partition (processes, or a cluster:
+Ray/Dask/Spark if data is big); push work into the DB (set-based SQL instead
+of row-by-row); columnar formats (Parquet) and Polars/DuckDB; incremental
+processing instead of full recompute; what's the SLA if it fails at 3am?)*
+
+**Q36.** Your team's FastAPI service handles 2k req/s; p99 jumps from 80 ms
+to 2 s every few minutes. *(GC pauses? (`gc.freeze()` after startup, tune
+thresholds; 3.14's incremental GC shortens them); blocking calls in the event loop
+(asyncio debug mode, `slow_callback_duration`); connection pool
+exhaustion; a cron/cache expiry stampede at regular intervals; noisy
+neighbours / CPU throttling from container limits (CFS quota) — check
+`nr_throttled`; a single slow dependency without timeouts.)*
+
+**Q37.** You're asked to build a feature-flag system in-house instead of buying
+one. *(What problem: release toggles vs experiments vs ops kill switches vs
+permissions; evaluation local in the SDK with streamed config (not a network
+call per check); safe defaults when the flag service is down; sticky
+percentage rollouts via hashing user ID; audit log; cleanup process for old
+flags (flag debt); testing combinations; when buying is cheaper.)*
+
+**Q38.** How would you level up a team of five middle Python developers to
+senior over a year? *(Ownership of production (on-call with support),
+design docs reviewed by peers, review culture (explaining *why*),
+deliberate practice on weak areas (concurrency, DB, ops), pairing on
+incidents and postmortems, giving them problems slightly beyond their
+level with a safety net, measuring by outcomes not tickets — and how you'd
+know it worked.)*
