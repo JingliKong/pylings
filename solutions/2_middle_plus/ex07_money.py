@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex07_money.py."""
+"""Reference solution for exercises/2_middle_plus/ex07_money.py."""
 import math
 from decimal import ROUND_HALF_EVEN, Decimal, InvalidOperation
 from fractions import Fraction

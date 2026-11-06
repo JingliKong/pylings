@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex18_generator_scheduler.py."""
+"""Reference solution for exercises/4_staff/ex18_generator_scheduler.py."""
 import heapq
 import itertools
 from collections import deque

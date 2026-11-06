@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex16_async_worker_pool.py."""
+"""Reference solution for exercises/3_senior/ex16_async_worker_pool.py."""
 import asyncio
 import contextlib
 

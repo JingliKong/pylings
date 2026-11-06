@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex14_external_sort.py."""
+"""Reference solution for exercises/3_senior/ex14_external_sort.py."""
 import contextlib
 import heapq
 import itertools

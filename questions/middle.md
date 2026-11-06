@@ -1,6 +1,6 @@
 # Question Bank — Middle → Middle+
 
-Targets CPython 3.12–3.14. This is the level *below* [questions.md](questions.md):
+Targets CPython 3.12–3.14. This is the level *below* [senior.md](senior.md):
 the questions a middle developer must answer confidently, and the ones that
 separate a strong middle from a senior. Each part gets harder toward the end.
 
@@ -728,7 +728,7 @@ do you type a function that returns the same type it receives? What is
   `Final`, `@overload`, `Self` (3.11), `TypeIs` (3.13) for narrowing
   helpers.
 - Senior follow-up (variance, `Callable` parameters): see
-  [questions.md](questions.md) Q17.
+  [senior.md](senior.md) Q17.
 
 </details>
 
@@ -748,11 +748,11 @@ do you type a function that returns the same type it receives? What is
 - **CPU-bound** pure Python: processes (`ProcessPoolExecutor`,
   `multiprocessing`) to use all cores — with the cost of pickling data
   between processes. Or C extensions/NumPy that release the GIL. 3.13+
-  free-threaded builds change this picture (see questions.md Q10).
+  free-threaded builds change this picture (see senior.md Q10).
 - Never call blocking code (`requests.get`, `time.sleep`, heavy CPU) inside
   an `async def` — it freezes the whole event loop. Use
   `await asyncio.to_thread(fn)`.
-- The deeper version is questions.md Q12.
+- The deeper version is senior.md Q12.
 
 </details>
 
@@ -957,7 +957,7 @@ trade-offs.
   `cProfile` + `snakeviz` locally, `pyinstrument` for a request.
 - Fix the biggest measured cost, verify with the same measurement, add a
   regression check (benchmark, query-count test, alert).
-- Senior version: questions.md Q14.
+- Senior version: senior.md Q14.
 
 </details>
 

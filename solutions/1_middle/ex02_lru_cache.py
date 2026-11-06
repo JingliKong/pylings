@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex02_lru_cache.py.
+"""Reference solution for exercises/1_middle/ex02_lru_cache.py.
 
 Hash map (key -> node) for O(1) lookup + a circular doubly linked list for
 O(1) "move to front" and "drop the tail".  A single sentinel node is both

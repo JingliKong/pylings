@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex10_task_graph.py."""
+"""Reference solution for exercises/2_middle_plus/ex10_task_graph.py."""
 from collections import defaultdict, deque
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 

@@ -8,7 +8,7 @@ module from an online shop "works on my machine".  Review it:
 - For each: what goes wrong, with an input that triggers it, and the fix.
 - Which three would you block the PR on?
 
-Don't run it — read it.  Answer key: solutions/ex04_bug_hunt_middle.md
+Don't run it — read it.  Answer key: solutions/1_middle/ex04_bug_hunt_middle.md
 """
 import json
 import os

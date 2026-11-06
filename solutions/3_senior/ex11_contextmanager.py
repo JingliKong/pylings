@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex11_contextmanager.py."""
+"""Reference solution for exercises/3_senior/ex11_contextmanager.py."""
 import functools
 
 

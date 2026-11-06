@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex09_event_bus.py.
+"""Reference solution for exercises/2_middle_plus/ex09_event_bus.py.
 
 Single-threaded by design (state the assumption in an interview).  For
 threads, guard ``_subs`` with a lock and copy the snapshot under it — but

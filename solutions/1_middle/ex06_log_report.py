@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex06_log_report.py."""
+"""Reference solution for exercises/1_middle/ex06_log_report.py."""
 import math
 import re
 from collections import defaultdict

@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex05_kv_transactions.py.
+"""Reference solution for exercises/1_middle/ex05_kv_transactions.py.
 
 Design: writes go straight to ``_data`` (reads are a plain dict lookup);
 each open transaction keeps an *undo log*: for every key it touched, the

@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex01_iter_tools.py.
+"""Reference solution for exercises/1_middle/ex01_iter_tools.py.
 
 Pattern used throughout: a plain function validates arguments eagerly and
 returns a generator.  A generator function's body (including its argument

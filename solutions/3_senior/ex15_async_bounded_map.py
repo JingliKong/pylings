@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex15_async_bounded_map.py."""
+"""Reference solution for exercises/3_senior/ex15_async_bounded_map.py."""
 import asyncio
 from collections import deque
 

@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex12_singleflight_cache.py."""
+"""Reference solution for exercises/3_senior/ex12_singleflight_cache.py."""
 import functools
 import threading
 import time

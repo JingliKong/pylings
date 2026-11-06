@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex20_di_container.py."""
+"""Reference solution for exercises/4_staff/ex20_di_container.py."""
 import inspect
 import threading
 import typing

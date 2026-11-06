@@ -1,7 +1,7 @@
 # Question Bank — Senior / Engineer
 
 Targets CPython 3.12–3.14. Start with
-[questions-middle.md](questions-middle.md) if you're preparing for a middle
+[middle.md](middle.md) if you're preparing for a middle
 or middle+ role, or to warm up.
 
 ---

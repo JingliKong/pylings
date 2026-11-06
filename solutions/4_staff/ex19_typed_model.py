@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex19_typed_model.py."""
+"""Reference solution for exercises/4_staff/ex19_typed_model.py."""
 import inspect
 import reprlib
 import types

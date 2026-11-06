@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex13_circuit_breaker.py.
+"""Reference solution for exercises/3_senior/ex13_circuit_breaker.py.
 
 Key ideas:
 - Every transition bumps ``_generation``.  A call remembers the generation

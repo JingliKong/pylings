@@ -8,7 +8,7 @@ It passed review and its unit tests.  Review it like an engineer:
 - For each: what goes wrong, under what conditions, and the fix.
 - Rank them: which would you block the PR on?
 
-Don't run it — read it.  Answer key: solutions/ex17_bug_hunt.md
+Don't run it — read it.  Answer key: solutions/3_senior/ex17_bug_hunt.md
 """
 import asyncio
 import json

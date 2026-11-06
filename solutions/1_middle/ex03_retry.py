@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex03_retry.py."""
+"""Reference solution for exercises/1_middle/ex03_retry.py."""
 import asyncio
 import functools
 import inspect

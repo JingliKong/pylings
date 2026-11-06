@@ -1,4 +1,4 @@
-"""Reference solution for exercises/ex08_rate_limiter.py.
+"""Reference solution for exercises/2_middle_plus/ex08_rate_limiter.py.
 
 Lazy refill: a bucket is just ``(tokens, last_update)``.  We never run a
 timer; on each access we add ``elapsed * rate`` tokens.  That makes an idle
