@@ -1,7 +1,4 @@
-# Interview prep
-
-Requires **Python 3.14** (exercise 19 relies on PEP 649 deferred annotations,
-exercise 16 on `asyncio.Queue.shutdown`). No third-party packages.
+# PyLings 🐍
 
 ## What's here
 
