@@ -15,25 +15,20 @@ import unittest
 
 def get_port(config):
     """config["port"] if present (0 is a valid port!), else 8080."""
-    port = config.get("port")
-    if port is not None or port == 0:
-        return port
-    
     return config.get("port") or 8080
 
 
 def has_items(cart):
     """True if cart (a list, or None) has at least one item."""
-    return bool(cart)
+    return len(cart) > 0
 
 
 def describe(value):
     """'none' for None, 'empty' for an empty string/container, else 'value'."""
-    if value is None:
-        return "none"
     if not value:
         return "empty"
-
+    if value is None:
+        return "none"
     return "value"
 
 
