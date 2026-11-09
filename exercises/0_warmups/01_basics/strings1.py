@@ -14,18 +14,32 @@ import unittest
 
 def initials(full_name):
     """'ada  lovelace' -> 'A.L.' (any amount of whitespace between names)."""
-    parts = full_name.split(" ")
-    return ".".join(p[0].upper() for p in parts) + "."
+    parts = full_name.strip().split(" ")
+    sol = ""
+    for i in range(len(parts)):
+        if parts[i] != '':
+            sol += (parts[i][0].upper()) + (".")
+    return sol
+    # return ".".join(p[0].upper() for p in parts) + "."
 
 
 def reverse_words(sentence):
     """'hello big world' -> 'world big hello'."""
-    return sentence[::-1]
+    a = sentence.split(" ")
+    sol = ""
+    for i in range(len(a)-1, -1, -1):
+        if a[i] != "":
+            sol += a[i] 
+        if i != 0:
+            sol += " "
+    return sol
 
 
 def file_extension(filename):
     """'archive.tar.gz' -> 'gz', 'README' -> ''."""
-    return filename.split(".")[1]
+    if "." not in filename:
+        return ''
+    return filename.split(".")[-1]
 
 
 # ---------------------------------------------------------------------------

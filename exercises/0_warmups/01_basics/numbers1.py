@@ -16,8 +16,8 @@ import math
 def split_bill(total_cents, people):
     """Split an amount in cents. Return (cents_each, cents_left_over), both ints."""
     each = total_cents // people
-    left = (total_cents % 100) 
-    return each, left+1
+    left = total_cents - people * each
+    return each, left
 
 
 def last_digit(n):
