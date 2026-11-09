@@ -15,19 +15,19 @@ import math
 
 def split_bill(total_cents, people):
     """Split an amount in cents. Return (cents_each, cents_left_over), both ints."""
-    each = total_cents / people
-    left = total_cents - each * people
-    return each, left
+    each = total_cents // people
+    left = (total_cents % 100) 
+    return each, left+1
 
 
 def last_digit(n):
     """Last decimal digit of n, also for negative n: last_digit(-47) == 7."""
-    return n % 10
+    return abs(n) % 10
 
 
 def close_enough(a, b):
     """True if two floats are equal up to rounding error."""
-    return a == b
+    return abs(a - b) <= 0.001
 
 
 # ---------------------------------------------------------------------------
