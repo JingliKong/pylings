@@ -13,24 +13,30 @@ import unittest
 # ---------------------------------------------------------------------------
 
 
-def get_port(config):
+def get_port(config: dict):
     """config["port"] if present (0 is a valid port!), else 8080."""
-    return config.get("port") or 8080
+    if config.get("port") == None:
+        return 8080
+    return config.get("port") 
 
 
 def has_items(cart):
     """True if cart (a list, or None) has at least one item."""
+    if (cart == [] or cart == None):
+        return False
     return len(cart) > 0
 
 
 def describe(value):
     """'none' for None, 'empty' for an empty string/container, else 'value'."""
-    if not value:
-        return "empty"
-    if value is None:
-        return "none"
-    return "value"
-
+    match value:
+        case None:
+            return 'none' 
+        case _ if len(value) > 0:
+            return 'value'
+        case _ if len(value) == 0:
+            return 'empty'
+    return None    
 
 # ---------------------------------------------------------------------------
 # Tests: don't change anything below this line.
