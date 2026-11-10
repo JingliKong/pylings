@@ -15,17 +15,17 @@ import unittest
 
 def format_price(amount):
     """1234.5 -> '$1,234.50'"""
-    return "$" + str(amount)
+    return f"${amount:,.2f}"
 
 
 def format_row(name, qty):
     """Name left-aligned in 10 chars, qty right-aligned in 5: 'apple     |    3'"""
-    return name + "|" + str(qty)
+    return f"{name:<10}|{qty:>5}"
 
 
 def debug_line(user_id, ok):
     """Exactly: 'user_id=42 ok=True'"""
-    return f"{user_id} {ok}"
+    return f"user_id={user_id} ok={ok}"
 
 
 # ---------------------------------------------------------------------------
