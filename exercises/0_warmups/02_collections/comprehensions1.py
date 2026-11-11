@@ -6,7 +6,7 @@ Run:   python3 -m pylings
 Or:    python3 exercises/0_warmups/02_collections/comprehensions1.py
 """
 import unittest
-
+from pathlib import Path
 # ---------------------------------------------------------------------------
 # Your code: make the tests below pass.
 # ---------------------------------------------------------------------------
@@ -14,28 +14,48 @@ import unittest
 
 def squares_of_evens(nums):
     """[1, 2, 3, 4] -> [4, 16]"""
-    raise NotImplementedError
+    res = []
+    for n in nums:
+        if n % 2 == 0: 
+            res.append(n**2)
+    return res
 
 
 def word_lengths(words):
     """['hi', 'hey'] -> {'hi': 2, 'hey': 3}"""
-    raise NotImplementedError
+    res = {}
+    for w in words:
+        res[w] = len(w)
+    return res
 
 
 def flatten_matrix(matrix):
     """[[1, 2], [3], []] -> [1, 2, 3]"""
-    raise NotImplementedError
+    res = []
+    for m in matrix:
+        res += m
+    return res
 
 
 def total_size(files):
     """[('a.txt', 10), ('b.txt', 5)] -> 15  (use a generator expression inside sum())"""
-    raise NotImplementedError
+    # total = 0
+    # for f in files:
+    #     total += Path(f).stat().st_size
+    # return total
+    return sum(size for _, size in files)
+
 
 
 def transpose(matrix):
     """[[1, 2, 3], [4, 5, 6]] -> [[1, 4], [2, 5], [3, 6]]"""
-    raise NotImplementedError
-
+    new_matrix = []
+    for column in range(len(matrix[0])):
+        new_row = []
+        for row in range(len(matrix)):
+            new_row.append(matrix[row][column])
+        new_matrix.append(new_row)
+    return new_matrix
 
 # ---------------------------------------------------------------------------
 # Tests: don't change anything below this line.
