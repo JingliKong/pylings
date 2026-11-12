@@ -17,14 +17,23 @@ from collections import Counter, defaultdict
 def top_n_words(text, n):
     """The n most common words (case-insensitive), most common first.
     Ties: the word that appeared first comes first."""
-    raise NotImplementedError
+    ls = Counter(map(str.lower, text.split()))
+    sol = sorted(ls.items(), key=lambda x: x[1], reverse=True)[:2]
+    def grab_keys(list: tuple[str, int]):
+        ans = []
+        for i in range(n):
+            ans.append(list[i][0])
+        return ans
+    return grab_keys(sol)
 
 
 def index_by_first_letter(words):
     """['apple', 'banana', 'avocado'] -> {'a': ['apple', 'avocado'], 'b': ['banana']}
     Use defaultdict(list), but return a plain dict."""
-    raise NotImplementedError
-
+    res = defaultdict(list)
+    for word in words:
+        res[word[0]].append(word)
+    return dict(res)
 
 # ---------------------------------------------------------------------------
 # Tests: don't change anything below this line.
