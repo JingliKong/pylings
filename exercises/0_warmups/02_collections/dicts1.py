@@ -13,10 +13,10 @@ import unittest
 
 
 def count_words(text):
-    """'a b a' -> {'a': 2, 'b': 1}. (No Counter here: practise dict methods.)"""
+    """'a b a' -> {'a': 2, 'b': 1}. (No Counter here: practice dict methods.)"""
     counts = {}
     for word in text.split():
-        counts[word] += 1
+        counts[word] = counts.setdefault(word, 0) + 1 
     return counts
 
 
@@ -24,19 +24,23 @@ def group_by_length(words):
     """['hi', 'yo', 'hey'] -> {2: ['hi', 'yo'], 3: ['hey']}"""
     groups = {}
     for word in words:
-        groups[len(word)] = [word]
+        groups.setdefault(len(word), []).append(word)
     return groups
 
 
 def invert(d):
     """{'a': 1, 'b': 2} -> {1: 'a', 2: 'b'}"""
-    return {k: v for k, v in d.items()}
+    sol = {}
+    for k, v in d.items():
+        sol[v] = k
+    return sol
+    # return {k: v for k, v in d.items()}
 
 
 def merge_settings(defaults, overrides):
     """A NEW dict: defaults updated with overrides. `defaults` must not change."""
-    defaults.update(overrides)
-    return defaults
+    # merged = defaults | overrides
+    return defaults | overrides
 
 
 # ---------------------------------------------------------------------------
