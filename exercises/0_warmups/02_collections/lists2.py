@@ -14,14 +14,17 @@ import unittest
 
 def remove_negatives(nums):
     """Remove negative numbers IN PLACE: the caller's list object is changed, nothing is returned."""
-    for n in nums:
-        if n < 0:
-            nums.remove(n)
-
+    nums_removed = 0 
+    for i in range(len(nums)):
+        if nums[i-nums_removed] < 0:
+            nums.pop(i - nums_removed)
+            nums_removed += 1
+    # return list(filter (lambda x: x >= 0, nums))
 
 def dedupe_keep_order(items):
     """[3, 1, 3, 2, 1] -> [3, 1, 2] (first occurrence wins, order kept)."""
-    return list(set(items))
+    # TODO: Check why this is find, but doing a sorted() always has the middle element in the wrong position
+    return list(dict.fromkeys(items))
 
 
 # ---------------------------------------------------------------------------
