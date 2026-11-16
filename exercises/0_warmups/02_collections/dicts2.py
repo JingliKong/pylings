@@ -19,7 +19,7 @@ def top_n_words(text, n):
     Ties: the word that appeared first comes first."""
     ls = Counter(map(str.lower, text.split()))
     sol = sorted(ls.items(), key=lambda x: x[1], reverse=True)[:2]
-    def grab_keys(list: tuple[str, int]):
+    def grab_keys(list: list[tuple[str, int]]):
         ans = []
         for i in range(n):
             ans.append(list[i][0])

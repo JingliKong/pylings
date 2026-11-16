@@ -5,6 +5,7 @@ Fix the functions so they never change the caller's data by accident.
 Run:   python3 -m pylings
 Or:    python3 exercises/0_warmups/02_collections/lists1.py
 """
+import copy
 import unittest
 
 # ---------------------------------------------------------------------------
@@ -14,19 +15,17 @@ import unittest
 
 def add_default_tags(tags):
     """Return a NEW list: tags + ["new"]. The caller's list must not change."""
-    result = tags
-    result.append("new")
-    return result
+    return tags + ["new"]
 
 
 def make_board(n):
     """An n x n board of "."; changing one cell must not change any other cell."""
-    return [["."] * n] * n
+    return [["."] * n for _ in range(n)]
 
 
 def copy_grid(grid):
     """A copy of a list of lists that is completely independent of the original."""
-    return grid.copy()
+    return copy.deepcopy(grid)
 
 
 # ---------------------------------------------------------------------------
