@@ -16,18 +16,17 @@ import time
 
 def common_friends(a, b):
     """Names in both lists, sorted."""
-    raise NotImplementedError
+    return sorted(list(set(a).intersection(b)))
 
 
 def only_in_first(a, b):
     """Names in a but not in b, sorted, without duplicates."""
-    raise NotImplementedError
+    return sorted(list(set(a).difference(b)))
 
 
 def has_duplicates(items):
     """True if any item appears more than once."""
-    raise NotImplementedError
-
+    return len(set(items)) != len(items)
 
 # ---------------------------------------------------------------------------
 # Tests: don't change anything below this line.
@@ -38,18 +37,18 @@ class Test(unittest.TestCase):
     def test_common_friends(self):
         self.assertEqual(common_friends(["ann", "bob", "cid"], ["cid", "ann", "dan"]), ["ann", "cid"])
 
-    # def test_only_in_first(self):
-    #     self.assertEqual(only_in_first(["ann", "bob", "ann"], ["bob"]), ["ann"])
+    def test_only_in_first(self):
+        self.assertEqual(only_in_first(["ann", "bob", "ann"], ["bob"]), ["ann"])
 
-    # def test_has_duplicates(self):
-    #     self.assertTrue(has_duplicates([1, 2, 1]))
-    #     self.assertFalse(has_duplicates([1, 2, 3]))
-    #     self.assertFalse(has_duplicates([]))
+    def test_has_duplicates(self):
+        self.assertTrue(has_duplicates([1, 2, 1]))
+        self.assertFalse(has_duplicates([1, 2, 3]))
+        self.assertFalse(has_duplicates([]))
 
-    # def test_has_duplicates_is_fast(self):
-    #     t0 = time.perf_counter()
-    #     self.assertFalse(has_duplicates(list(range(200_000))))
-    #     self.assertLess(time.perf_counter() - t0, 1.0)
+    def test_has_duplicates_is_fast(self):
+        t0 = time.perf_counter()
+        self.assertFalse(has_duplicates(list(range(200_000))))
+        self.assertLess(time.perf_counter() - t0, 1.0)
 
 
 if __name__ == "__main__":
