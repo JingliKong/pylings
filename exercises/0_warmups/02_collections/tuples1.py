@@ -6,6 +6,8 @@ unpacking.
 Run:   python3 -m pylings
 Or:    python3 exercises/0_warmups/02_collections/tuples1.py
 """
+import math
+from tkinter.font import names
 import unittest
 
 # ---------------------------------------------------------------------------
@@ -15,17 +17,29 @@ import unittest
 
 def min_max(nums):
     """Return (smallest, largest) as a tuple."""
-    raise NotImplementedError
+    smallest  =  math.inf  
+    largest = -math.inf 
+    for n in nums:
+        if n < smallest:
+            smallest = n
+        elif n >= largest:
+            largest = n
+    if smallest > largest:
+        tmp = largest
+        largest = smallest
+        smallest = tmp
+    return (smallest, largest)
 
-
-def head_tail(items):
+def head_tail(items: list):
     """[1, 2, 3, 4] -> (1, [2, 3, 4]). Use star unpacking: first, *rest = ..."""
-    raise NotImplementedError
+    return (items.pop(0), items[:])
+
+    
 
 
 def swap_pairs(pairs):
-    """[(1, "a"), (2, "b")] -> [("a", 1), ("b", 2)]"""
-    raise NotImplementedError
+    """[(1, "a"), (2, "b")] -> [("a", 1), ("b", 2)]"""  
+    return [(v,k) for k, v in pairs]
 
 
 # ---------------------------------------------------------------------------
