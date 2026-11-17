@@ -15,7 +15,7 @@ import unittest
 
 def total(*nums):
     """total(1, 2, 3) == 6; total() == 0"""
-    raise NotImplementedError
+    return sum(nums)
 
 
 def make_url(base, *parts, **query):

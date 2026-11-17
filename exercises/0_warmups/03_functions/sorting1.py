@@ -15,12 +15,14 @@ import unittest
 def by_age(people):
     """people: list of (name, age). Youngest first; equal ages keep their original order.
     Return a new list; don't change `people`."""
+    return sorted(people,key=lambda p: p[1])
     return people.sort(key=lambda p: p[1])
 
 
 def by_age_desc_then_name(people):
     """Oldest first; equal ages sorted by name A to Z."""
-    raise NotImplementedError
+    def tmp(a: tuple[str, int],b: tuple[str, int]):
+        
 
 
 def top_scores(scores, n):
