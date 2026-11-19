@@ -15,12 +15,14 @@ import time
 
 def add_item(item, basket=[]):
     """Append item to basket and return it. A call without basket starts a new, empty one."""
+    if not basket: basket = []
     basket.append(item)
     return basket
 
 
-def log_event(name, when=time.time()):
+def log_event(name, when=None):
     """Return (name, timestamp). Without `when`, use the time of the CALL."""
+    if not when: when = time.time()
     return (name, when)
 
 
@@ -39,14 +41,14 @@ class Test(unittest.TestCase):
         self.assertIs(add_item("egg", basket), basket)
         self.assertEqual(basket, ["milk", "egg"])
 
-    # def test_timestamp_is_call_time(self):
-    #     _, t1 = log_event("a")
-    #     time.sleep(0.05)
-    #     _, t2 = log_event("b")
-    #     self.assertGreaterEqual(t2 - t1, 0.04)
+    def test_timestamp_is_call_time(self):
+        _, t1 = log_event("a")
+        time.sleep(0.05)
+        _, t2 = log_event("b")
+        self.assertGreaterEqual(t2 - t1, 0.04)
 
-    # def test_explicit_time(self):
-    #     self.assertEqual(log_event("x", when=123.0), ("x", 123.0))
+    def test_explicit_time(self):
+        self.assertEqual(log_event("x", when=123.0), ("x", 123.0))
 
 
 if __name__ == "__main__":
