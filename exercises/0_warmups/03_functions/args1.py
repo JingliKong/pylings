@@ -21,10 +21,14 @@ def total(*nums):
 def make_url(base, *parts, **query):
     """make_url("https://x.com", "users", 42, page=2, sort="name")
     -> "https://x.com/users/42?page=2&sort=name"   (no "?" when there is no query)"""
-    raise NotImplementedError
+    if parts:
+        base += "/" + "/".join(str(p) for p in parts)
+    if query:
+        base += "?" + "&".join(f"{k}={v}" for k, v in query.items())
+    return base
 
 
-def connect(host, port=5432, timeout=10):
+def connect(host, port=5432, *, timeout=10):
     """`timeout` must be keyword-only: connect("db", 5432, 3) must raise TypeError."""
     return (host, port, timeout)
 
